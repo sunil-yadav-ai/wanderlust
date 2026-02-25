@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderLust</title>
+</head>
+<body>
+    <h1><%= item.title %></h1>
+    <img src="<%= item.image.url %>" alt="image">
+    <p><b><%= item.description %></b></p>
+    <p> &#8377 <%= item.price.toLocaleString("en-In") %></p>
+    <p><%= item.location %></p>
+    <p><%= item.country %></p>
+
+
+    <form method="get" action="/listing/<%= item._id %>/edit">
+        <button>edit</button>
+    </form>
+    <form method="POST" action="/listing/<%= item._id %>?_method=DELETE">
+        <button>DELETE</button>
+    </form>
+    
+</body>
+</html>
