@@ -3,15 +3,20 @@ const app = express();
 const mongoose = require('mongoose');
 const listing = require('./models/listing.js');
 const path = require('path');
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
+const ejsmate = require('ejs-mate');
 
- 
+
+
+
+app.engine('ejs', ejsmate);
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
 
 app.use(express.urlencoded({extended:true}));
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
+app.use(express.static(path.join(__dirname,"/public")));
 
 main().then(()=>{
     console.log('connection is done!');
