@@ -1,14 +1,14 @@
-<% layout('/layouts/boilerplate.ejs') -%>
-<body>
+<%- layout("layouts/boilerplate") -%>
 
     <h1>All listing is here</h1>
-    <form method="get" action="/listing/new">
+    <!-- <form method="get" action="/listing/new">
         <button>CREATE</button>
-    </form>
+    </form> -->
 
     <ul>
         <% for(let listing of alllistings){ %>
             <li><a href="/listing/<%= listing._id %>"> <%= listing.title %> </a></li>
+            
             
             
 
@@ -17,4 +17,3 @@
     </ul>
     
     
-</body>

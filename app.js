@@ -4,12 +4,12 @@ const mongoose = require('mongoose');
 const listing = require('./models/listing.js');
 const path = require('path');
 const methodOverride = require('method-override');
-const ejsmate = require('ejs-mate');
+const ejsMate = require("ejs-mate");
 
 
 
 
-app.engine('ejs', ejsmate);
+app.engine('ejs', ejsMate);
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
 

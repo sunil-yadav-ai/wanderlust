@@ -1,3 +1,37 @@
-body{
-    background-color: pink;
+.navbar{
+    height: 5rem;
+}
+.fa-compass{
+    color: #fe424d;
+}
+
+.nav-link{
+    color: #222222 !important;
+}
+
+.f-info{
+    height: 8rem;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color:#ebebeb;
+}
+.f-info-socialmedia,.f-info-links{
+    
+    width: 100%;
+}
+.f-info-socialmedia i{
+    font-size: 1.2rem;
+    margin-right: 1rem;
+}
+
+
+.f-info-links a{
+    text-decoration: none;
+    color:#222222;
+}
+.f-info-links a:hover{
+    text-decoration: underline;
 }
