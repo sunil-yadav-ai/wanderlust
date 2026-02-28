@@ -35,3 +35,33 @@
 .f-info-links a:hover{
     text-decoration: underline;
 }
+
+
+.card{
+    border: none !important;
+    margin-bottom: 2rem;
+    
+}
+.card-img-top{
+    border-radius: 1rem !important; 
+    width: 100%;
+    object-fit: cover;
+}
+.card-body{
+    padding-bottom: 0% !important;
+}
+.row{
+    margin-left: 6rem !important;
+}
+.center{
+    margin-left: 6rem;
+}
+
+.card-img-overlay{
+    opacity: 0;
+}
+.card-img-overlay:hover{
+    opacity: 0.2;
+    background-color: white;
+
+}
