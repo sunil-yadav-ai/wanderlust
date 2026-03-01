@@ -77,6 +77,7 @@ app.delete('/listing/:id',async(req,res)=>{
 app.get('/listing/:id',async(req,res)=>{
     let { id } = req.params;
     let item = await listing.findById(id);
+    console.log(item);
     res.render('show.ejs',{item});
 })
 
