@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const listing = require('./models/listing.js');
 const path = require('path');
 const methodOverride = require('method-override');
+const ExpressError = require('./utils/expressError.js')
 const ejsMate = require("ejs-mate");
 
 
@@ -34,9 +35,15 @@ app.get('/',(req,res)=>{
 
 
 //index route
-app.get('/listing',async (req,res)=>{
-    let alllistings = await listing.find();
+app.get('/listing',async (req,res,next)=>{
+    try{
+        let alllistings = await listing.find();
     res.render('index.ejs',{ alllistings });
+
+    }catch(err){
+        next(err)
+    }
+    
 
 })
 
@@ -44,41 +51,78 @@ app.get('/listing/new',(req,res)=>{
     
     res.render('create.ejs');
 })
-app.post('/listing',async(req,res)=>{
-    let{title,description,image,price,location,country} = req.body;
-    let insert = await listing.insertOne({title,description,image,price,location,country});
+app.post('/listing',async(req,res,next)=>{
+    try{
+        if(!req.body){
+            throw new ExpressError(400,"Send valid data for listing")
+        }
+        let{title,description,image,price,location,country} = req.body;
+        let insert = await listing.insertOne({title,description,image,price,location,country});
     
-    res.redirect('/listing');
+        res.redirect('/listing');
+
+    }catch(err){
+        next(err)
+
+    }
+    
 
 })
 
-app.get('/listing/:id/edit',async(req,res)=>{
-    let { id } = req.params;
+app.get('/listing/:id/edit',async(req,res,next)=>{
+    try{
+        let { id } = req.params;
     let item = await listing.findById(id);
     res.render('edit.ejs',{item});
+
+    }catch(err){
+        next(err)
+    }
+    
 })
 
-app.put("/listing/:id",async(req,res)=>{
-    let { id } = req.params;
+app.put("/listing/:id",async(req,res,next)=>{
+    try{
+        let { id } = req.params;
+        if(!req.body){
+            throw new ExpressError(400,"Send valid ID")
+        }
     let{title,description,image,price,location,country} = req.body;
     let update = await listing.findByIdAndUpdate(id,{title,description,image,price,location,country});
     res.redirect(`/listing/${id}`);
 
 
+    }catch(err){
+        next(err)
+    }
+    
+
 })
-app.delete('/listing/:id',async(req,res)=>{
-    let {id} = req.params;
+app.delete('/listing/:id',async(req,res,next)=>{
+    try{
+        let {id} = req.params;
     let d = await listing.findByIdAndDelete(id);
     res.redirect('/listing');
 
+    }catch(err){
+        next(err)
+    }
+    
+
 })
 
 
-app.get('/listing/:id',async(req,res)=>{
-    let { id } = req.params;
+app.get('/listing/:id',async(req,res,next)=>{
+    try{
+        let { id } = req.params;
     let item = await listing.findById(id);
     console.log(item);
     res.render('show.ejs',{item});
+
+    }catch(err){
+        next(err)
+    }
+    
 })
 
 
@@ -98,6 +142,16 @@ app.get('/listing/:id',async(req,res)=>{
     
 //     res.send("done");
 // })
+
+app.use((req,res,next)=>{
+    next(new ExpressError( 404, "page not found!"))
+});
+
+app.use((err,req,res,next)=>{
+    let { statusEx=500,message="Somthing went worng"} = err;
+    res.status(statusEx).send(message);
+    
+})
 
 app.listen(8080,()=>{
 
