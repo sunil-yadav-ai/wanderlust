@@ -37,8 +37,10 @@ app.get('/',(req,res)=>{
 //index route
 app.get('/listing',async (req,res,next)=>{
     try{
+        
         let alllistings = await listing.find();
-    res.render('index.ejs',{ alllistings });
+        
+        res.render('index.ejs',{ alllistings });
 
     }catch(err){
         next(err)
@@ -53,7 +55,19 @@ app.get('/listing/new',(req,res)=>{
 })
 app.post('/listing',async(req,res,next)=>{
     try{
-        if(!req.body){
+        if(!req.body.title){
+            throw new ExpressError(400,"Send valid data for listing")
+        }
+        if(!req.body.description){
+            throw new ExpressError(400,"Send valid data for listing")
+        }
+        if(!req.body.price){
+            throw new ExpressError(400,"Send valid data for listing")
+        }
+        if(!req.body.location){
+            throw new ExpressError(400,"Send valid data for listing")
+        }
+        if(!req.body.country){
             throw new ExpressError(400,"Send valid data for listing")
         }
         let{title,description,image,price,location,country} = req.body;
@@ -144,12 +158,13 @@ app.get('/listing/:id',async(req,res,next)=>{
 // })
 
 app.use((req,res,next)=>{
-    next(new ExpressError( 404, "page not found!"))
+    next( new ExpressError(404,"page not found!!"));
+    
 });
 
 app.use((err,req,res,next)=>{
     let { statusEx=500,message="Somthing went worng"} = err;
-    res.status(statusEx).send(message);
+    res.status(statusEx).render("error.ejs" , { message });
     
 })
 
