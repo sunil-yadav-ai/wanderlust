@@ -7,6 +7,8 @@ const methodOverride = require('method-override');
 const ExpressError = require('./utils/expressError.js')
 const ejsMate = require("ejs-mate");
 
+const { listingSchema} = require('./schema.js');
+
 
 
 
@@ -29,13 +31,25 @@ async function main() {
 
 }
 
+const validateListing = (req,res,next)=>{
+    let { error } = listingSchema.validate(req.body);
+        
+        if(error){
+            throw new ExpressError(400,error);
+
+        }else{
+            next();
+        }
+};
+
+
 app.get('/',(req,res)=>{
     res.send('i am root');
 })
 
 
 //index route
-app.get('/listing',async (req,res,next)=>{
+app.get('/listing', async (req,res,next)=>{
     try{
         
         let alllistings = await listing.find();
@@ -53,23 +67,10 @@ app.get('/listing/new',(req,res)=>{
     
     res.render('create.ejs');
 })
-app.post('/listing',async(req,res,next)=>{
+app.post('/listing',validateListing,async(req,res,next)=>{
     try{
-        if(!req.body.title){
-            throw new ExpressError(400,"Send valid data for listing")
-        }
-        if(!req.body.description){
-            throw new ExpressError(400,"Send valid data for listing")
-        }
-        if(!req.body.price){
-            throw new ExpressError(400,"Send valid data for listing")
-        }
-        if(!req.body.location){
-            throw new ExpressError(400,"Send valid data for listing")
-        }
-        if(!req.body.country){
-            throw new ExpressError(400,"Send valid data for listing")
-        }
+        
+        
         let{title,description,image,price,location,country} = req.body;
         let insert = await listing.insertOne({title,description,image,price,location,country});
     
@@ -95,7 +96,7 @@ app.get('/listing/:id/edit',async(req,res,next)=>{
     
 })
 
-app.put("/listing/:id",async(req,res,next)=>{
+app.put("/listing/:id",validateListing,async(req,res,next)=>{
     try{
         let { id } = req.params;
         if(!req.body){
