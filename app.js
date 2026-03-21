@@ -8,6 +8,7 @@ const ExpressError = require('./utils/expressError.js')
 const ejsMate = require("ejs-mate");
 
 const { listingSchema} = require('./schema.js');
+const review = require('./models/review.js');
 
 
 
@@ -99,9 +100,7 @@ app.get('/listing/:id/edit',async(req,res,next)=>{
 app.put("/listing/:id",validateListing,async(req,res,next)=>{
     try{
         let { id } = req.params;
-        if(!req.body){
-            throw new ExpressError(400,"Send valid ID")
-        }
+        
     let{title,description,image,price,location,country} = req.body;
     let update = await listing.findByIdAndUpdate(id,{title,description,image,price,location,country});
     res.redirect(`/listing/${id}`);
@@ -140,6 +139,20 @@ app.get('/listing/:id',async(req,res,next)=>{
     
 })
 
+app.post('/listing/:id/review',async(req,res)=>{
+    let { id} = req.params;
+    
+
+    let data = await listing.findById(id);
+    let review1 = new review(req.body.review);
+    
+    
+    data.reviews.push(review1);
+    await review1.save();
+    await data.save();
+    
+    res.redirect(`/listing/${id}`);
+})
 
 
 
