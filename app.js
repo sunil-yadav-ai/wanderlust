@@ -9,6 +9,7 @@ const ejsMate = require("ejs-mate");
 
 const { listingSchema} = require('./schema.js');
 const review = require('./models/review.js');
+const { reviewSchema } = require('./schema.js')
 
 
 
@@ -22,6 +23,9 @@ app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 app.use(express.static(path.join(__dirname,"/public")));
 
+
+//server
+
 main().then(()=>{
     console.log('connection is done!');
     })
@@ -32,6 +36,11 @@ async function main() {
 
 }
 
+
+/*
+ validate middleware for server
+
+*/
 const validateListing = (req,res,next)=>{
     let { error } = listingSchema.validate(req.body);
         
@@ -43,13 +52,28 @@ const validateListing = (req,res,next)=>{
         }
 };
 
+/*
+review validate middleware for server 
+
+*/
+const validateReview = (req,res,next)=>{
+    let { error } = reviewSchema.validate(req.body);
+
+    if(error){
+        throw new ExpressError(400,error);
+    }else{
+        next();
+    }
+}
+
+// get requiest for root
 
 app.get('/',(req,res)=>{
     res.send('i am root');
 })
 
 
-//index route
+//index route All listing is here
 app.get('/listing', async (req,res,next)=>{
     try{
         
@@ -63,6 +87,8 @@ app.get('/listing', async (req,res,next)=>{
     
 
 })
+
+//create new listing here
 
 app.get('/listing/new',(req,res)=>{
     
@@ -85,6 +111,9 @@ app.post('/listing',validateListing,async(req,res,next)=>{
 
 })
 
+//edit requiest
+
+
 app.get('/listing/:id/edit',async(req,res,next)=>{
     try{
         let { id } = req.params;
@@ -96,6 +125,8 @@ app.get('/listing/:id/edit',async(req,res,next)=>{
     }
     
 })
+
+//edit here
 
 app.put("/listing/:id",validateListing,async(req,res,next)=>{
     try{
@@ -112,6 +143,8 @@ app.put("/listing/:id",validateListing,async(req,res,next)=>{
     
 
 })
+
+//delete here
 app.delete('/listing/:id',async(req,res,next)=>{
     try{
         let {id} = req.params;
@@ -125,12 +158,13 @@ app.delete('/listing/:id',async(req,res,next)=>{
 
 })
 
+//show 
 
 app.get('/listing/:id',async(req,res,next)=>{
     try{
         let { id } = req.params;
-    let item = await listing.findById(id);
-    console.log(item);
+    let item = await listing.findById(id).populate("reviews");
+    
     res.render('show.ejs',{item});
 
     }catch(err){
@@ -139,21 +173,47 @@ app.get('/listing/:id',async(req,res,next)=>{
     
 })
 
-app.post('/listing/:id/review',async(req,res)=>{
-    let { id} = req.params;
+//review post here
+
+app.post('/listing/:id/review',validateReview,async(req,res,next)=>{
+    try{
+        let { id} = req.params;
     
 
-    let data = await listing.findById(id);
-    let review1 = new review(req.body.review);
+        let data = await listing.findById(id);
+        let review1 = new review(req.body.review);
+        
+        
+        data.reviews.push(review1);
+        await review1.save();
+        await data.save();
+        
+        res.redirect(`/listing/${id}`);
+    }catch(err){
+        
+        throw new ExpressError(404,err);
+    }
     
-    
-    data.reviews.push(review1);
-    await review1.save();
-    await data.save();
-    
-    res.redirect(`/listing/${id}`);
 })
 
+//review delete route
+app.delete("/listing/:id/review/:reviewId", async (req, res) => {
+    try {
+        let { id, reviewId } = req.params;
+
+       
+        let result = await listing.findByIdAndUpdate(id, {$pull: { reviews: reviewId }});
+
+        
+        let reviewresult = await review.findByIdAndDelete(reviewId);
+        console.log(result);
+        console.log(reviewresult);
+
+        res.redirect(`/listing/${id}`);
+    } catch (err) {
+        throw new ExpressError(404, err);
+    }
+});
 
 
 // app.get('/testing', (req,res)=>{
@@ -171,6 +231,8 @@ app.post('/listing/:id/review',async(req,res)=>{
 //     res.send("done");
 // })
 
+
+//if user enter wrong path then execute this
 app.use((req,res,next)=>{
     next( new ExpressError(404,"page not found!!"));
     
@@ -182,6 +244,7 @@ app.use((err,req,res,next)=>{
     
 })
 
+//port number
 app.listen(8080,()=>{
 
     console.log("server is listening port 8080.");

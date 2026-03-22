@@ -47,7 +47,7 @@ body{
 }
 
 
-.card{
+.listing1-card{
     border: none !important;
     margin-bottom: 2rem;
     
@@ -97,4 +97,10 @@ body{
 }
 .card-body{
     padding-left: 0 !important ;
+}
+
+.img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
 }
