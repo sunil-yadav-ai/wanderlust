@@ -38,6 +38,7 @@ router.get('/', async (req,res,next)=>{
         
         let alllistings = await listing.find();
         
+        
         res.render('index.ejs',{ alllistings });
 
     }catch(err){
@@ -46,6 +47,31 @@ router.get('/', async (req,res,next)=>{
     
 
 })
+
+
+
+
+//show router
+router.get('/:id',async(req,res,next)=>{
+    try{
+        let { id } = req.params;
+
+
+        let item = await listing.findById(id).populate("reviews");
+        if(!item){
+            req.flash("error","Listing is not exist!");
+            res.redirect('/listing');
+        }
+    
+    
+        res.render('./show.ejs',{item});
+
+    }catch(err){
+        next(err)
+    }
+    
+});
+
 
 //create new listing here
 
@@ -57,8 +83,12 @@ router.post('/',validateListing,async(req,res,next)=>{
     try{
         
         
-        let{title,description,image,price,location,country} = req.body;
-        let insert = await listing.insertOne({title,description,image,price,location,country});
+        console.log(req.body);
+        let insert = new listing(req.body.listing);
+
+        await insert.save();
+        req.flash("success","New listing is created!");
+        
     
         res.redirect('/listing');
 
@@ -78,6 +108,7 @@ router.get('/:id/edit',async(req,res,next)=>{
         let { id } = req.params;
     let item = await listing.findById(id);
     
+    
     res.render('edit.ejs',{item});
 
     }catch(err){
@@ -88,50 +119,39 @@ router.get('/:id/edit',async(req,res,next)=>{
 
 //edit here
 
-router.put("/:id",validateListing,async(req,res,next)=>{
-    try{
-        let { id } = req.params;
-        
-
-        // if(typeof req.body.image === "string") {
-        //     req.body.image = { url: req.body.image };
-        // }
-        
-    let{title,description,image,price,location,country} = req.body;
-    
-    
-    let update = await listing.findByIdAndUpdate(id,{title,description,image,price,location,country});
-    
-    
-    res.redirect(`/listing/${id}`);
 
 
-    }catch(err){
-        next(err)
-    }
-    
-
-})
-
-router.get('/:id',async(req,res,next)=>{
-    try{
+router.put("/:id", validateListing, async (req, res, next) => {
+    try {
         let { id } = req.params;
 
-        
+        let { title, description, image, price, location, country } = req.body.listing;
+
+        // Fix image format
+        if (typeof image === "string") {
+            image = {
+                url: image,
+                filename: "listingimage"
+            };
+        }
+
+        let item =  await listing.findByIdAndUpdate(id, {
+            $set: { title, description, image, price, location, country }
+        });
 
 
-
-
-    let item = await listing.findById(id).populate("reviews");
-    
-    
-    res.render('./show.ejs',{item});
-
-    }catch(err){
-        next(err)
+        if(!item){
+        req.flash("error","Listing is not exist!");
+        res.redirect('/listing');
     }
-    
-})
+        req.flash("success","listing is Edit!");
+
+        res.redirect(`/listing/${id}`);
+    } catch (err) {
+        next(err);
+    }
+});
+
 
 
 //delete here
@@ -139,6 +159,7 @@ router.delete('/:id',async(req,res,next)=>{
     try{
         let {id} = req.params;
     let d = await listing.findByIdAndDelete(id);
+    req.flash("success","listing is Delete!");
     res.redirect('/listing');
 
     }catch(err){

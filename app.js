@@ -2,15 +2,29 @@ const express = require('express');
 
 const app = express();
 const mongoose = require('mongoose');
+const session = require('express-session')
 
 const path = require('path');
 const methodOverride = require('method-override');
 const ExpressError = require('./utils/expressError.js')
 const ejsMate = require("ejs-mate");
 const listings = require('./router/listing.js');
+const flash = require('connect-flash');
 
 const reviews = require('./router/review.js');
 
+
+const sessionOperations ={
+    secret:"sunilyadav",
+    resave:false,
+    saveUninitialized:true ,
+    cookie:{
+        express:Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge:7 * 24 * 60 * 60 * 1000,
+        httpOnly:true
+
+    },
+}
 
 
 
@@ -23,6 +37,9 @@ app.use(express.urlencoded({extended:true}));
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'views'));
 app.use(express.static(path.join(__dirname,"/public")));
+app.use(session(sessionOperations));
+app.use(flash()); 
+
 
 
 
@@ -38,7 +55,11 @@ async function main() {
 
 }
 
-
+app.use((req,res,next)=>{
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
+})
 
 
 
