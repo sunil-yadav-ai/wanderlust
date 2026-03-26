@@ -51,26 +51,7 @@ router.get('/', async (req,res,next)=>{
 
 
 
-//show router
-router.get('/:id',async(req,res,next)=>{
-    try{
-        let { id } = req.params;
 
-
-        let item = await listing.findById(id).populate("reviews");
-        if(!item){
-            req.flash("error","Listing is not exist!");
-            res.redirect('/listing');
-        }
-    
-    
-        res.render('./show.ejs',{item});
-
-    }catch(err){
-        next(err)
-    }
-    
-});
 
 
 //create new listing here
@@ -107,6 +88,10 @@ router.get('/:id/edit',async(req,res,next)=>{
     try{
         let { id } = req.params;
     let item = await listing.findById(id);
+        if(!item){
+            req.flash("error","Listing does not exist!");
+            return res.redirect('/listing');
+        }  
     
     
     res.render('edit.ejs',{item});
@@ -140,10 +125,10 @@ router.put("/:id", validateListing, async (req, res, next) => {
         });
 
 
-        if(!item){
-        req.flash("error","Listing is not exist!");
-        res.redirect('/listing');
-    }
+         
+
+
+
         req.flash("success","listing is Edit!");
 
         res.redirect(`/listing/${id}`);
@@ -170,6 +155,26 @@ router.delete('/:id',async(req,res,next)=>{
 })
 
 //show 
+//show router
+router.get('/:id',async(req,res,next)=>{
+    try{
+        let { id } = req.params;
+
+
+        let item = await listing.findById(id).populate("reviews");
+        if(!item){
+            req.flash("error","Listing is not exist!");
+           return  res.redirect('/listing');
+        }
+    
+    
+        res.render('./show.ejs',{item});
+
+    }catch(err){
+        next(err)
+    }
+    
+});
 
 
 module.exports = router;
