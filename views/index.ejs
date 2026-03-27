@@ -7,13 +7,14 @@
         <button>CREATE</button>
     </form> -->
     
-    <h1 class="center">All listings</h1>
-    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+    <h1 class="center">All listings</h1> 
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-4">
+        
         
         <% for(let listing of alllistings){ %>
             <a class="A" href="/listing/<%= listing._id %>">
             
-                <div class="card cols listing1-card" style="width: 20rem;">
+                <div class="card cols listing1-card offset-1" style="width: 25rem;">
                     
                         <img src="<%= listing.image.url %>" class="card-img-top" alt="image" style="height: 20rem;">
                         <div class="card-img-overlay"></div>

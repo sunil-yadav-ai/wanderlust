@@ -8,10 +8,14 @@ const path = require('path');
 const methodOverride = require('method-override');
 const ExpressError = require('./utils/expressError.js')
 const ejsMate = require("ejs-mate");
-const listings = require('./router/listing.js');
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const listingsRouter = require('./router/listing.js');
 const flash = require('connect-flash');
+const User = require("./models/user.js");
+const userRouter = require("./router/user.js");
 
-const reviews = require('./router/review.js');
+const reviewsRouter = require('./router/review.js');
 
 
 const sessionOperations ={
@@ -39,6 +43,13 @@ app.set('views',path.join(__dirname,'views'));
 app.use(express.static(path.join(__dirname,"/public")));
 app.use(session(sessionOperations));
 app.use(flash()); 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 
@@ -62,9 +73,22 @@ app.use((req,res,next)=>{
 })
 
 
+// app.get("/Demouser",async (req,res)=>{
+//     let fakeUser = new User({
+//         email:"abc@gmail.com",
+//         username:"sunilyadav"
+//     })
 
-app.use('/listing' ,listings);
-app.use('/listing/:id/review',reviews);
+//     let result=  await User.register(fakeUser,"helloWord");
+//     res.send(result);
+
+// })
+
+
+
+app.use('/listing' ,listingsRouter);
+app.use('/listing/:id/review',reviewsRouter);
+app.use('/',userRouter);
 
 
 //if user enter wrong path then execute this
