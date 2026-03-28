@@ -9,6 +9,19 @@
         <a class="nav-link active" aria-current="page" href="/">Home</a>
         <a class="nav-link" href="/listing">ALL LISTINGS</a>
         <a class="nav-link" href="/listing/new">CREATE</a>
+      </div>
+
+      <div class="navbar-nav ms-auto">
+        <% if(!Current){ %>
+          <a class="nav-link active" aria-current="page" href="/signUp">SignIn</a>
+          <a class="nav-link" href="/login">LogIn</a>
+
+        <% } %>
+        <% if(Current){ %>
+          <a class="nav-link" href="/logout">LogOut</a>
+          
+          <% } %>
+        
         
       </div>
     </div>

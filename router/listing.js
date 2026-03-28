@@ -3,7 +3,7 @@ const router = express.Router();
 const { listingSchema} = require('../schema.js');
 const ExpressError = require('../utils/expressError.js')
 const listing = require('../models/listing.js');
-
+const { isLogin } = require("../middleware.js");
 
 
 
@@ -33,8 +33,9 @@ const validateListing = (req,res,next)=>{
 
 
 //index route All listing is here
-router.get('/', async (req,res,next)=>{
+router.get('/',  async (req,res,next)=>{
     try{
+        
         
         let alllistings = await listing.find();
         
@@ -56,7 +57,7 @@ router.get('/', async (req,res,next)=>{
 
 //create new listing here
 
-router.get('/new',(req,res)=>{
+router.get('/new',isLogin,(req,res)=>{
     
     res.render('create.ejs');
 })
@@ -84,8 +85,9 @@ router.post('/',validateListing,async(req,res,next)=>{
 //edit requiest
 
 
-router.get('/:id/edit',async(req,res,next)=>{
+router.get('/:id/edit',isLogin, async(req,res,next)=>{
     try{
+        
         let { id } = req.params;
     let item = await listing.findById(id);
         if(!item){
@@ -140,7 +142,7 @@ router.put("/:id", validateListing, async (req, res, next) => {
 
 
 //delete here
-router.delete('/:id',async(req,res,next)=>{
+router.delete('/:id',isLogin,async(req,res,next)=>{
     try{
         let {id} = req.params;
     let d = await listing.findByIdAndDelete(id);

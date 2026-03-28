@@ -69,20 +69,11 @@ async function main() {
 app.use((req,res,next)=>{
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
+    res.locals.Current = req.user;
     next();
 })
 
 
-// app.get("/Demouser",async (req,res)=>{
-//     let fakeUser = new User({
-//         email:"abc@gmail.com",
-//         username:"sunilyadav"
-//     })
-
-//     let result=  await User.register(fakeUser,"helloWord");
-//     res.send(result);
-
-// })
 
 
 
@@ -90,6 +81,12 @@ app.use('/listing' ,listingsRouter);
 app.use('/listing/:id/review',reviewsRouter);
 app.use('/',userRouter);
 
+
+
+app.get("/",(req,res)=>{
+    console.log(req.user);
+    res.send(`this is root route `);
+})
 
 //if user enter wrong path then execute this
 app.use((req,res,next)=>{
