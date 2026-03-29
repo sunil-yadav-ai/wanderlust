@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { listingSchema} = require('../schema.js');
-const ExpressError = require('../utils/expressError.js')
+
+
 const listing = require('../models/listing.js');
-const { isLogin } = require("../middleware.js");
+const { isLogin,isOwner ,validateListing} = require("../middleware.js");
+const { populate } = require('../models/review.js');
 
 
 
@@ -12,22 +13,7 @@ const { isLogin } = require("../middleware.js");
 
 
 
-/*
- validate middleware for server
 
-*/
-
-
-const validateListing = (req,res,next)=>{
-    let { error } = listingSchema.validate(req.body);
-        
-        if(error){
-            throw new ExpressError(400,error);
-
-        }else{
-            next();
-        }
-};
 
 
 
@@ -67,8 +53,11 @@ router.post('/',validateListing,async(req,res,next)=>{
         
         console.log(req.body);
         let insert = new listing(req.body.listing);
+        insert.owner = req.user._id;
+
 
         await insert.save();
+        console.log(insert);
         req.flash("success","New listing is created!");
         
     
@@ -85,7 +74,7 @@ router.post('/',validateListing,async(req,res,next)=>{
 //edit requiest
 
 
-router.get('/:id/edit',isLogin, async(req,res,next)=>{
+router.get('/:id/edit',isLogin,isOwner, async(req,res,next)=>{
     try{
         
         let { id } = req.params;
@@ -142,7 +131,7 @@ router.put("/:id", validateListing, async (req, res, next) => {
 
 
 //delete here
-router.delete('/:id',isLogin,async(req,res,next)=>{
+router.delete('/:id',isLogin,isOwner,async(req,res,next)=>{
     try{
         let {id} = req.params;
     let d = await listing.findByIdAndDelete(id);
@@ -163,11 +152,12 @@ router.get('/:id',async(req,res,next)=>{
         let { id } = req.params;
 
 
-        let item = await listing.findById(id).populate("reviews");
+        let item = await listing.findById(id).populate({path: "reviews",populate: {path: "author"}}).populate("owner");
         if(!item){
             req.flash("error","Listing is not exist!");
            return  res.redirect('/listing');
         }
+        
     
     
         res.render('./show.ejs',{item});

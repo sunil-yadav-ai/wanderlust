@@ -14,19 +14,30 @@
 
         <div class="card-body">
             <p class="card-text"> 
-                
-                
-                <%= item.description %>
-                <br>
-                &#8377 <%= item.price.toLocaleString("en-In") %>
-                <br>
-                <%= item.location %>
-                <br>
-                <%= item.country %>
-
+               <i>Owner: <%= item.owner.username %></i>
             </p>
+                
+            <p class="card-text">  
+                <%= item.description %>
+            </p>
+            <p class="card-text">
+                
+                &#8377 <%= item.price.toLocaleString("en-In") %>
+            </p>
+                
+            <p class="card-text">
+                <%= item.location %>
+            </p>
+                
+            <p class="card-text">
+                <%= item.country %>
+            </p>
+
+        
         </div>
     </div>
+
+    <% if(Current && item.owner._id.equals(Current._id)){ %>
             
     <div class="btns">
         <form class="col-1 offset-3 " method="get" action="/listing/<%= item._id %>/edit">
@@ -37,9 +48,10 @@
             <button class="btn btn-dark ">DELETE</button>
         </form>
     </div>
-
+    <% } %>
 
     <div class="col-8 offset-3 mb-3 mt-2" >
+        <% if(Current){ %>
         <hr>
         <h4>Leave a review</h4>
         <form action="/listing/<%= item._id %>/review" method="post" novalidate class="needs-validation">
@@ -57,6 +69,7 @@
         </form>
 
         <hr>
+        <% } %>
         
         <h4>All Reviews is here</h4>
         <div class="row">
@@ -65,7 +78,7 @@
                     <div class="card h-100 mt-3">
                         <img class="img" src="https://imgcdn.stablediffusionweb.com/2024/11/26/ce6f3141-5a1f-45e2-b6c9-afc10a1f7f0c.jpg" alt="photo">
                         <div class="card-body ">
-                            <h5 class="card-title">Sunil Yadav</h5>
+                            <h5 class="card-title"><%= review.author.username %></h5>
                                 
                             <p class="card-text">
                                 <b><i><%= review.comment %></i></b>
@@ -78,9 +91,11 @@
                                     <span>⭐</span>
                                 <% } %>
                             </p>
+                            <% if(Current && Current._id.equals(review.author._id)) {%>
                             <form  method="post" action="/listing/<%= item._id %>/review/<%= review._id %>?_method=DELETE">
                                 <button class="btn btn-dark btn-sm">🗑️ Delete</button>
                             </form>
+                            <% } %>
                         </div>
                     </div>
                     <!-- <form action="">
