@@ -31,9 +31,11 @@ module.exports.postListing = async(req,res,next)=>{
     try{
         
         
-        console.log(req.body);
+       let { link , filename } =  req.file;
         let insert = new listing(req.body.listing);
         insert.owner = req.user._id;
+        insert.image.url = link;
+        insert.image.filename = filename;
 
 
         await insert.save();

@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const listingControls = require("../controls/listing.js");
-
-
+const multer  = require('multer');
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage })
 
 const { isLogin,isOwner ,validateListing} = require("../middleware.js");
 
@@ -13,7 +14,10 @@ const { isLogin,isOwner ,validateListing} = require("../middleware.js");
 //index route All listing is here
 router.route("/")
     .get( listingControls.index )
-    .post(validateListing,listingControls.postListing);
+    .post(isLogin,upload.single('listing[image][url]'),listingControls.postListing);
+    // .post(upload.single('listing[image][url]'),(req,res)=>{
+    //     res.send(req.file);
+    // })
 
 
 

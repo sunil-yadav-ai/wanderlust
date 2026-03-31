@@ -55,10 +55,72 @@
         <hr>
         <h4>Leave a review</h4>
         <form action="/listing/<%= item._id %>/review" method="post" novalidate class="needs-validation">
-            <div >
+            <!-- <div >
                 <label for="review[rating]" class="form-label">Rating</label>
                 <input type="range" min="1" max="5" id="rating" name="review[rating]" class="form-range">
-             </div>
+             </div> -->
+
+            
+            <fieldset class="starability-slot">
+                <legend>Rating</legend>
+
+                <!-- No rating -->
+                <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked />
+    
+                <!-- 1 star -->
+                <input type="radio" id="rate1" name="review[rating]" value="1" />
+                <label for="rate1" title="Terrible">1 star</label>
+
+                <!-- 2 stars -->
+                <input type="radio" id="rate2" name="review[rating]" value="2" />
+                <label for="rate2" title="Not good">2 stars</label>
+
+                <!-- 3 stars -->
+                <input type="radio" id="rate3" name="review[rating]" value="3" />
+                <label for="rate3" title="Average">3 stars</label>
+
+                <!-- 4 stars -->
+                <input type="radio" id="rate4" name="review[rating]" value="4" />
+                <label for="rate4" title="Very good">4 stars</label>
+
+                <!-- 5 stars -->
+                <input type="radio" id="rate5" name="review[rating]" value="5" />
+                <label for="rate5" title="Amazing">5 stars</label>
+
+                <!-- Focus ring -->
+                <span class="starability-focus-ring"></span>
+            </fieldset>
+            <br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div>
                 <label for="review[comment]" class="form-label">Comment</label>
                 <textarea name="review[comment]" id="comment" rows="5" cols="20" class="form-control" required ></textarea>
@@ -80,16 +142,15 @@
                         <div class="card-body ">
                             <h5 class="card-title"><%= review.author.username %></h5>
                                 
+                            
+
                             <p class="card-text">
-                                <b><i><%= review.comment %></i></b>
+                                
+                                <p class="starability-result" data-rating=<%= review.rating %>></p>   
                             </p>
 
                             <p class="card-text">
-                                <b><i><%= review.rating %></i></b>
-
-                                <% for(let i = 1; i <= review.rating; i++){ %>
-                                    <span>⭐</span>
-                                <% } %>
+                                <b><i><%= review.comment %></i></b>
                             </p>
                             <% if(Current && Current._id.equals(review.author._id)) {%>
                             <form  method="post" action="/listing/<%= item._id %>/review/<%= review._id %>?_method=DELETE">
