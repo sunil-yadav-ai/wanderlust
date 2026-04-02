@@ -41,7 +41,7 @@ router.get('/:id/edit',isLogin,isOwner, listingControls.editRender);
 
 
 router.route("/:id")
-    .put( validateListing, listingControls.editListing)
+    .put( validateListing,upload.single('listing[image][url]'), listingControls.editListing)
     .delete(isLogin,isOwner,listingControls.deleteListing)
     .get(listingControls.showListing);
 

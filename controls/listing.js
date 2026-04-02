@@ -82,21 +82,29 @@ module.exports.editRender = async(req,res,next)=>{
 module.exports.editListing = async (req, res, next) => {
     try {
         let { id } = req.params;
+        
 
-        let { title, description, image, price, location, country } = req.body.listing;
+        let { title, description, price, location, country } = req.body.listing;
 
-        // Fix image format
-        if (typeof image === "string") {
-            image = {
-                url: image,
-                filename: "listingimage"
-            };
-        }
+        // // Fix image format
+        // if (typeof image === "string") {
+        //     image = {
+        //         url: image,
+        //         filename: "listingimage"
+        //     };
+        // }
 
         let item =  await listing.findByIdAndUpdate(id, {
-            $set: { title, description, image, price, location, country }
+            $set: { title, description, price, location, country }
         });
 
+        if (req.file) {
+            let { path, filename } = req.file;
+            item.image.url = path;
+            item.image.filename = filename;
+
+            await item.save();
+        }
 
          
 
