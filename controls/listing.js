@@ -62,14 +62,16 @@ module.exports.editRender = async(req,res,next)=>{
     try{
         
         let { id } = req.params;
-    let item = await listing.findById(id);
+        let item = await listing.findById(id);
         if(!item){
             req.flash("error","Listing does not exist!");
             return res.redirect('/listing');
         }  
+
     
-    
-    res.render('edit.ejs',{item});
+        let origin = item.image.url;
+        origin = origin.replace("/upload/","/upload/w_300,h_200,c_fill,q_auto,f_auto/");
+        res.render('edit.ejs',{item , origin });
 
     }catch(err){
         next(err)

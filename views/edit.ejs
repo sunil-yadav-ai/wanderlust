@@ -14,6 +14,12 @@
                     <label for="description" class="form-label">Description</label>
                     <textarea required name="listing[description]" placeholder="enter description..." class="form-control"><%= item.description %></textarea>
                 </div>
+
+                <div class="mb-3">
+                    original listing image <br>
+                    <img src=" <%= origin %>" alt="image">
+                </div>
+
                 <div class="mb-3">
                     <label for="image" class="from-label">Image</label>
                     <input   type="file"  name="listing[image][url]" placeholder="Enter new image..." class="form-control">
