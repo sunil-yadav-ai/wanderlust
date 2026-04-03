@@ -104,3 +104,9 @@ body{
     width: 50px;
     border-radius: 50%;
 }
+
+
+#map{
+    height: 20rem;
+    width: 90vh;
+}
