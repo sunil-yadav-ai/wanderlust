@@ -2,6 +2,7 @@ const listing = require('../models/listing.js');
 
 
 
+
 module.exports.index = async (req,res,next)=>{
     try{
         
@@ -29,18 +30,35 @@ module.exports.createRender = (req,res)=>{
 
 module.exports.postListing = async(req,res,next)=>{
     try{
+
+        let url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(req.body.listing.location)}&format=json`;
+
+        let result = await fetch(url, {
+            headers: {
+                "User-Agent": "simple-app"
+            }
+        });
+
+        let data = await result.json();
+
+        // console.log(data[0].lat, data[0].lon);
         
         
+
+        
+  
        let { path , filename } =  req.file;
-    //    console.log(path);
-    //    console.log(filename);
+        //    console.log(path);
+        //    console.log(filename);
         let insert = new listing(req.body.listing);
         insert.owner = req.user._id;
         insert.image.url = path;
         insert.image.filename = filename;
 
-
-        await insert.save();
+        insert.coordinates.lat = data[0].lat;
+        insert.coordinates.lon = data[0].lon;
+        let print = await insert.save();
+        console.log(print);
         // console.log(insert);
         req.flash("success","New listing is created!");
         
@@ -49,11 +67,12 @@ module.exports.postListing = async(req,res,next)=>{
 
     }catch(err){
         next(err)
-
     }
-    
 
 }
+    
+
+
 
 
 

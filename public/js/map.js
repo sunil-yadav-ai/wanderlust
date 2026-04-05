@@ -1,12 +1,22 @@
- // map create
-  var map = L.map('map').setView([28.6139, 77.2090], 10);
 
-  // map layer (OpenStreetMap)
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
-  }).addTo(map);
 
-  // marker
-  L.marker([28.6139, 77.2090]).addTo(map)
-    .bindPopup("Mera Location")
-    .openPopup();
+
+const coords = window.placesData;
+
+const lat = coords.lat;
+const lon = coords.lon;
+
+// map create
+const map = L.map('map').setView([lat, lon], 20);
+
+// tiles
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 9
+}).addTo(map);
+
+// marker
+L.marker([lat, lon]).addTo(map)
+  .bindPopup("welcome to WanderLust")
+  .openPopup();
+
+

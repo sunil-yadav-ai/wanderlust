@@ -21,7 +21,13 @@ const listingSchema = new Schema({
        
     },
     price:Number,
-    location:String,
+    location:{
+        type:String    
+    },
+    coordinates: {
+        lat: Number,
+        lon: Number
+    },
     country:String,
     reviews:[
         {

@@ -1,4 +1,9 @@
 <%- layout("layouts/boilerplate") -%>
+<script>
+  window.placesData = <%- JSON.stringify(item.coordinates) %>;
+ 
+</script>
+
 
 <div class="row">
     <div class="col-8 offset-3">
@@ -104,7 +109,7 @@
 
         
         <% } %>
-        <% if(item.reviews > 0) {%>
+        <% if(item.reviews.length > 0) {%>
             <hr>
         
         <h4>All Reviews is here</h4>
