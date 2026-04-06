@@ -1,24 +1,25 @@
 <nav class="navbar navbar-expand-md bg-body-tertiary border-bottom sticky-top ">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-compass"></i></a>
+    <a class="navbar-brand" href="/listing"><i class="fa-solid fa-compass"></i></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="/">Home</a>
+        
         <a class="nav-link" href="/listing">ALL LISTINGS</a>
-        <a class="nav-link" href="/listing/new">CREATE</a>
+        
       </div>
 
       <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="/listing/new">CREATE</a>
         <% if(!Current){ %>
-          <a class="nav-link active" aria-current="page" href="/signUp">SignIn</a>
-          <a class="nav-link" href="/login">LogIn</a>
+          <a class="nav-link active" aria-current="page" href="/signUp"><b>SignIn</b></a>
+          <a class="nav-link" href="/login"><b>LogIn</b></a>
 
         <% } %>
         <% if(Current){ %>
-          <a class="nav-link" href="/logout">LogOut</a>
+          <a class="nav-link" href="/logout"><b>LogOut</b></a>
           
           <% } %>
         

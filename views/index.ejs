@@ -1,13 +1,80 @@
 <%- layout("layouts/boilerplate") -%>
    
     
-  
+  <style>
+    #fillter{
+        display: flex;
+        align-items: center;
+
+    }
+    .fillter{
+        text-align: center;
+        margin-left: 2rem;
+        margin-top: 1rem;
+        opacity: 0.7;
+
+    }
+    .fillter:hover{
+        opacity: 1;
+    }
+    .fillter-switch{
+        margin-top: 1rem;
+        margin-left: 3rem;
+
+    }
+  </style>
     
     <!-- <form method="get" action="/listing/new">
         <button>CREATE</button>
     </form> -->
     
-    <h1 class="center">All listings</h1> 
+    <div id="fillter">
+        <div class="fillter">
+            <i class="fa-solid fa-fire"></i>
+            <p>Fire</p>
+        </div>
+        <div class="fillter">
+            <i class="fa-solid fa-hashtag"></i>
+            <p>Trending</p>
+        </div>
+        <div class="fillter">
+            <i class="fa-solid fa-money-bill"></i>
+            <p>Budget Friendly</p>
+        </div>
+        <div class="fillter">
+            <i class="fa-solid fa-mountain"></i>
+            <p>Mountain View</p>
+        </div>
+        <div class="fillter">
+            <i class="fa-solid fa-tree"></i>
+            <p>Beach Nearby</p>
+        </div>
+        <div class="fillter">
+            <i class="fa-solid fa-water"></i>
+            <p>Pool</p>
+        </div>
+        <div class="fillter">
+            <i class="fa-solid fa-crown"></i>
+            <p>Luxury</p>
+        </div>
+        <div class="fillter">
+            <i class="fa-solid fa-mountain"></i>
+            <p>Mountain View</p>
+        </div>
+        <div class="fillter">
+            <i class="fa-solid fa-tree"></i>
+            <p>Beach Nearby</p>
+        </div>
+        <div class="fillter">
+            <i class="fa-solid fa-water"></i>
+            <p>Pool</p>
+        </div>
+        <div class="form-check-reverse form-switch  fillter-switch ">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+            <label class="form-check-label" for="switchCheckDefault">Check total</label>
+        </div>
+        
+    </div>
     <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-4">
         
         
@@ -29,7 +96,15 @@
             
         <% } %> 
     </div>
-    
+
+
+
+<script>
+    let mode = document.getElementById("switchCheckDefault");
+    mode.addEventListener('click',()=>{
+        console.log("click");
+    })
+</script>
     
     
     
