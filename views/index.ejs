@@ -18,9 +18,26 @@
         opacity: 1;
     }
     .fillter-switch{
-        margin-top: 1rem;
-        margin-left: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+       
+       margin-left: 3rem;
+        
 
+    }
+    .GST{
+        display: none;
+    }
+    .fillter-switch{
+        border: 1px solid black;
+        height: 2.5rem;
+        border-radius: 1rem;
+        padding: 1rem !important;
+        
+       
+        width: 13rem;
+        
     }
   </style>
     
@@ -71,7 +88,7 @@
         </div>
         <div class="form-check-reverse form-switch  fillter-switch ">
             <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
-            <label class="form-check-label" for="switchCheckDefault">Check total</label>
+            <label class="form-check-label" for="switchCheckDefault">Check total GST</label>
         </div>
         
     </div>
@@ -87,7 +104,8 @@
                         <div class="card-img-overlay"></div>
                         <div class="card-body">
                             <p class="card-text"> <b> <%= listing.title %> </b></p>
-                            <p class="price">&#8377 <%= listing.price.toLocaleString("en-In")%></p>
+                            <p class="price">&#8377 <%= listing.price.toLocaleString("en-In")%> &nbsp;<span class="GST"> +15% GST</span></p>
+                           
                         
                         </div>
                 
@@ -102,7 +120,15 @@
 <script>
     let mode = document.getElementById("switchCheckDefault");
     mode.addEventListener('click',()=>{
-        console.log("click");
+        let logic = document.getElementsByClassName("GST");
+        for(info of logic){
+            if(info.style.display != "inline"){
+                info.style.display = "inline";
+            }else{
+                info.style.display = "none";
+            }
+            
+        }
     })
 </script>
     
