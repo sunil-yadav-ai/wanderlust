@@ -103,10 +103,7 @@ app.use('/',userRouter);
 
 
 
-app.get("/",(req,res)=>{
-    console.log(req.user);
-    res.send(`this is root route `);
-})
+
 
 //if user enter wrong path then execute this
 app.use((req,res,next)=>{
