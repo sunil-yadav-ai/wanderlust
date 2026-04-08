@@ -2,17 +2,14 @@ if(process.env.NODE_ENV != "production"){
     require('dotenv').config();
 }
 
-
-
-
-
-
 const express = require('express');
 
 
 const app = express();
 const mongoose = require('mongoose');
 const session = require('express-session')
+
+const MongoStore = require("connect-mongo").default;
 
 const path = require('path');
 const methodOverride = require('method-override');
@@ -28,8 +25,21 @@ const userRouter = require("./router/user.js");
 const reviewsRouter = require('./router/review.js');
 
 
+let db_url = process.env.MONGO_CLOUD
+
+const store =  MongoStore.create({
+    mongoUrl:db_url,
+    crypto:{
+        secret: process.env.SECRETCODE,
+    },
+    touchAfter: 24 * 3600,
+});
+
+
+
 const sessionOperations ={
-    secret:"sunilyadav",
+    store,
+    secret:process.env.SECRETCODE,
     resave:false,
     saveUninitialized:true ,
     cookie:{
@@ -72,7 +82,7 @@ main().then(()=>{
 .catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/WanderLust');
+  await mongoose.connect(db_url);
 
 }
 
@@ -112,6 +122,7 @@ app.use((err,req,res,next)=>{
 
 //port number
 app.listen(8080,()=>{
+    
 
     console.log("server is listening port 8080.");
 })
