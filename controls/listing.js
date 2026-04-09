@@ -28,8 +28,64 @@ module.exports.createRender = (req,res)=>{
 
 
 
-module.exports.postListing = async(req,res,next)=>{
-    try{
+// module.exports.postListing = async(req,res,next)=>{
+//     try{
+
+//         let url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(req.body.listing.location)}&format=json`;
+
+//         let result = await fetch(url, {
+//             headers: {
+//                 "User-Agent": "simple-app"
+//             }
+//         });
+
+//         let data = await result.json();
+
+//         // console.log(data[0].lat, data[0].lon);
+        
+        
+
+        
+  
+//        let { path , filename } =  req.file;
+//         //    console.log(path);
+//         //    console.log(filename);
+//         let insert = new listing(req.body.listing);
+//         insert.owner = req.user._id;
+//         insert.image.url = path;
+//         insert.image.filename = filename;
+
+//         insert.coordinates.lat = data[0].lat;
+//         insert.coordinates.lon = data[0].lon;
+//         let print = await insert.save();
+//         console.log(print);
+//         // console.log(insert);
+//         req.flash("success","New listing is created!");
+        
+    
+//         res.redirect('/listing');
+
+//     }catch(err){
+//         next(err)
+//     }
+
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+module.exports.postListing = async (req, res, next) => {
+    try {
 
         let url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(req.body.listing.location)}&format=json`;
 
@@ -41,35 +97,50 @@ module.exports.postListing = async(req,res,next)=>{
 
         let data = await result.json();
 
-        // console.log(data[0].lat, data[0].lon);
-        
-        
+        // ✅ Location check
+        if (!data || data.length === 0) {
+            req.flash("error", "Invalid location!");
+            return res.redirect("/listing/new");
+        }
 
-        
-  
-       let { path , filename } =  req.file;
-        //    console.log(path);
-        //    console.log(filename);
         let insert = new listing(req.body.listing);
         insert.owner = req.user._id;
-        insert.image.url = path;
-        insert.image.filename = filename;
 
+        // ✅ Image check
+        if (req.file) {
+            let { path, filename } = req.file;
+            insert.image.url = path;
+            insert.image.filename = filename;
+        }
+
+        // ✅ Coordinates set
         insert.coordinates.lat = data[0].lat;
         insert.coordinates.lon = data[0].lon;
+
         let print = await insert.save();
         console.log(print);
-        // console.log(insert);
-        req.flash("success","New listing is created!");
-        
-    
+
+        req.flash("success", "New listing is created!");
         res.redirect('/listing');
 
-    }catch(err){
-        next(err)
+    } catch (err) {
+        next(err);
     }
+};
 
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 
 
