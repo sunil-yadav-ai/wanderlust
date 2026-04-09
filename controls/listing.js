@@ -89,13 +89,46 @@ module.exports.postListing = async (req, res, next) => {
 
         let url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(req.body.listing.location)}&format=json`;
 
+        
+
         let result = await fetch(url, {
-            headers: {
-                "User-Agent": "simple-app"
-            }
+        headers: {
+            "User-Agent": "simple-app"
+        }
         });
 
-        let data = await result.json();
+        let text = await result.text();
+
+        let data;
+
+        try {
+        data = JSON.parse(text);
+        } catch (err) {
+        console.log("API ERROR 👉", text);
+        req.flash("error", "Location not found or API blocked!");
+        return res.redirect("/listing/new");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // ✅ Location check
         if (!data || data.length === 0) {
