@@ -84,87 +84,67 @@ module.exports.createRender = (req,res)=>{
 
 
 
+
+
+
+
 module.exports.postListing = async (req, res, next) => {
     try {
 
+        console.log("FORM DATA 👉", req.body.listing);
+
+        // 🌍 Location API call
         let url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(req.body.listing.location)}&format=json`;
 
-        
-
         let result = await fetch(url, {
-        headers: {
-            "User-Agent": "simple-app"
-        }
+            headers: {
+                "User-Agent": "wanderlust-app (your-email@example.com)"
+            }
         });
 
         let text = await result.text();
-
         let data;
 
         try {
-        data = JSON.parse(text);
+            data = JSON.parse(text);
         } catch (err) {
-        console.log("API ERROR 👉", text);
-        req.flash("error", "Location not found or API blocked!");
-        return res.redirect("/listing/new");
+            console.log("API ERROR 👉", text);
+            data = null; // ❗ API fail hone par bhi app crash nahi hoga
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // ✅ Location check
-        if (!data || data.length === 0) {
-            req.flash("error", "Invalid location!");
-            return res.redirect("/listing/new");
-        }
-
+        // 📝 New listing create
         let insert = new listing(req.body.listing);
         insert.owner = req.user._id;
 
-        // ✅ Image check
+        // 🖼️ Image handling
         if (req.file) {
             let { path, filename } = req.file;
             insert.image.url = path;
             insert.image.filename = filename;
         }
 
-        // ✅ Coordinates set
-        insert.coordinates.lat = data[0].lat;
-        insert.coordinates.lon = data[0].lon;
+        // 📍 Coordinates handling (safe)
+        if (data && data.length > 0) {
+            insert.coordinates.lat = data[0].lat;
+            insert.coordinates.lon = data[0].lon;
+        } else {
+            console.log("⚠️ Location not found, using default coords");
+            insert.coordinates.lat = 0;
+            insert.coordinates.lon = 0;
+        }
 
-        let print = await insert.save();
-        console.log(print);
+        // 💾 Save to DB
+        let savedListing = await insert.save();
+        console.log("SAVED 👉", savedListing);
 
         req.flash("success", "New listing is created!");
-        res.redirect('/listing');
+        res.redirect("/listing");
 
     } catch (err) {
+        console.log("FINAL ERROR 👉", err);
         next(err);
     }
 };
-
-
-
-
-
 
 
 
