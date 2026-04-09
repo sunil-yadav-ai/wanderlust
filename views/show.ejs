@@ -133,7 +133,7 @@
                             </p>
                             <% if(Current && Current._id.equals(review.author._id)) {%>
                             <form  method="post" action="/listing/<%= item._id %>/review/<%= review._id %>?_method=DELETE">
-                                <button class="btn btn-dark btn-sm">🗑️ Delete</button>
+                                <button class="btn btn-dark btn-sm">Delete</button>
                             </form>
                             <% } %>
                         </div>
@@ -152,6 +152,7 @@
         <div id="map"></div>
     </div>
 </div>
+<script src="/js/map.js"></script>
 
 
 
