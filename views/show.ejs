@@ -88,11 +88,27 @@
   <% if(Current){ %>
   <div class="row">
     <div class="col-12 col-md-8 mx-auto mb-3">
+
+     
+
+
+
+
+
+
+
+
+
+
+
       <hr>
       <h4>Leave a review</h4>
 
-      <form action="/listing/<%= item._id %>/review" method="post" class="needs-validation">
 
+      <form action="/listing/<%= item._id %>/review" method="post" class="needs-validation">
+        <fieldset class="starability-slot"> <legend>Rating</legend> <!-- No rating --> <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked /> <!-- 1 star --> <input type="radio" id="rate1" name="review[rating]" value="1" /> <label for="rate1" title="Terrible">1 star</label> <!-- 2 stars --> <input type="radio" id="rate2" name="review[rating]" value="2" /> <label for="rate2" title="Not good">2 stars</label> <!-- 3 stars --> <input type="radio" id="rate3" name="review[rating]" value="3" /> <label for="rate3" title="Average">3 stars</label> <!-- 4 stars --> <input type="radio" id="rate4" name="review[rating]" value="4" /> <label for="rate4" title="Very good">4 stars</label> <!-- 5 stars --> <input type="radio" id="rate5" name="review[rating]" value="5" /> <label for="rate5" title="Amazing">5 stars</label> <!-- Focus ring --> <span class="starability-focus-ring"></span> </fieldset> 
+        
+        <br><br>
         <div class="mb-3">
           <label class="form-label">Comment</label>
           <textarea name="review[comment]" class="form-control" required></textarea>
@@ -103,6 +119,8 @@
     </div>
   </div>
   <% } %>
+
+  
 
   <!-- REVIEWS -->
   <% if(item.reviews.length > 0) { %>
@@ -147,6 +165,9 @@
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="/js/map.js"></script>
  
+
+
+
 
 
 
