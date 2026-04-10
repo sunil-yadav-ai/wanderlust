@@ -10,6 +10,12 @@ const { isLogin,isOwner ,validateListing} = require("../middleware.js");
 
 
 
+app.get("/", (req, res) => {
+    res.redirect("/listing");
+});
+
+
+
 
 
 //index route All listing is here

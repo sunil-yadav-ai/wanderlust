@@ -105,6 +105,14 @@ app.use('/',userRouter);
 
 
 
+app.get("/", (req, res) => {
+    res.redirect("/listing");
+});
+
+
+
+
+
 //if user enter wrong path then execute this
 app.use((req,res,next)=>{
     next( new ExpressError(404,"page not found!!"));
