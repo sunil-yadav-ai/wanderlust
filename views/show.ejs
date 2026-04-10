@@ -133,9 +133,10 @@
         <% for(review of item.reviews){ %>
         <div class="col-12 col-md-6 mb-3">
           <div class="card h-100">
-            <img src="https://via.placeholder.com/300" class="img-fluid">
+            <img src="https://th.bing.com/th/id/OIP.U-7XRcZLo7hxHQzo86aM_gHaE8?o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3" class="img-fluid" height="30" width="30" style="border-radius: 50px;">
             <div class="card-body">
               <h5><%= review.author.username %></h5>
+              <p class="starability-result" data-rating=<%= review.rating %>></p>
               <p><%= review.comment %></p>
 
               <% if(Current && Current._id.equals(review.author._id)) { %>
