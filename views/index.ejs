@@ -5,6 +5,7 @@
     #fillter{
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
 
     }
     .fillter{
@@ -39,6 +40,12 @@
         width: 13rem;
         
     }
+    @media screen and (mix-width:420){
+        #fillter{
+            display: none;
+        }
+        
+    }
   </style>
     
     <!-- <form method="get" action="/listing/new">
@@ -58,31 +65,31 @@
             <i class="fa-solid fa-money-bill"></i>
             <p>Budget Friendly</p>
         </div>
-        <div class="fillter">
+        <div class="fillter b-1">
             <i class="fa-solid fa-mountain"></i>
             <p>Mountain View</p>
         </div>
-        <div class="fillter">
+        <div class="fillter b-1">
             <i class="fa-solid fa-tree"></i>
             <p>Beach Nearby</p>
         </div>
-        <div class="fillter">
+        <div class="fillter b-1">
             <i class="fa-solid fa-water"></i>
             <p>Pool</p>
         </div>
-        <div class="fillter">
+        <div class="fillter b-1">
             <i class="fa-solid fa-crown"></i>
             <p>Luxury</p>
         </div>
-        <div class="fillter">
+        <div class="fillter b-1">
             <i class="fa-solid fa-mountain"></i>
             <p>Mountain View</p>
         </div>
-        <div class="fillter">
+        <div class="fillter b-1">
             <i class="fa-solid fa-tree"></i>
             <p>Beach Nearby</p>
         </div>
-        <div class="fillter">
+        <div class="fillter b-1">
             <i class="fa-solid fa-water"></i>
             <p>Pool</p>
         </div>
@@ -92,15 +99,15 @@
         </div>
         
     </div>
-    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-4">
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-4 main">
         
         
         <% for(let listing of alllistings){ %>
             <a class="A" href="/listing/<%= listing._id %>">
             
-                <div class="card cols listing1-card offset-1" style="width: 25rem;">
+                <div class="card cols listing1-card  " style="width: 25rem;">
                     
-                        <img src="<%= listing.image.url %>" class="card-img-top" alt="image" style="height: 20rem;">
+                        <img src="<%= listing.image.url %>" class="card-img-top img-fluid" alt="image" style="height: 20rem;">
                         <div class="card-img-overlay"></div>
                         <div class="card-body">
                             <p class="card-text"> <b> <%= listing.title %> </b></p>
