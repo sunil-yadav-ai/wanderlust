@@ -10,9 +10,7 @@ const { isLogin,isOwner ,validateListing} = require("../middleware.js");
 
 
 
-router.get("/", (req, res) => {
-    res.redirect("/listing");
-});
+
 
 
 
