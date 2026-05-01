@@ -9,8 +9,10 @@ module.exports.signUPRender = (req,res)=>{
 module.exports.signUPPost = async (req,res,next)=>{
     try{
         let { username,email,password,reenter} = req.body;
+        
 
-        let result =  new User({username,reenter});//email
+        let result =  new User({username,email,reenter});//email
+        
         let reg = await User.register(result,password);
         req.login(reg,(error)=>{
             if(error){
